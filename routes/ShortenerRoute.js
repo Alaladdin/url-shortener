@@ -1,9 +1,20 @@
 const express = require('express');
-const { Redirect, AddUrl } = require('../controller/ShortenerController');
+const { Redirect, AddUrl, DeleteUrl, WebInterface, GetUrlList } = require('../controller/ShortenerController');
 const router = express.Router();
 
 // GET
+
+// Web Interface
+router.get('/', WebInterface);
+
+// Web Interface
+router.get('/list', GetUrlList);
+
+// Open shortId
 router.get('/:shortId', Redirect);
+
+// Delete shortId
+router.delete('/', DeleteUrl);
 
 // POST
 router.post('/', AddUrl);

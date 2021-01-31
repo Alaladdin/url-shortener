@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<head>
+    <title>URL shortener</title>
+    <link rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css'>
+</head>
+<body>
+    <div class='container'>
+        <h1 class='page-title my-3 text-center'>URL shortener</h1>
+
+        <div class='card'>
+            <div class='card-header d-flex justify-content-between'>
+                <span>Links count: <%= urlList.count %></span>
+                <span class='event-message text-success'></span>
+            </div>
+
+            <div class='card-body'>
+                <form class='form-shorter input-group'>
+                    <input type='text' class='form-shorter__url form-control' placeholder='https://'
+                           value='https://google.com'>
+                    <div class='input-group-append'>
+                        <button class='btn btn-dark' id='usernameBtn'>Short</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class='message-box'>
+                <ul class='list-group list-group-flush' id='message-list'></ul>
+                <div class='info'></div>
+            </div>
+
+            <div class='url-list card-footer'>
+
+            </div>
+        </div>
+    </div>
+
+    <script src='/js/client.js'></script>
+</body>
+</html>

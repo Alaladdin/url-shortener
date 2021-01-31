@@ -2,9 +2,13 @@ const express = require('express');
 const mongoose = require('mongoose');
 const route = require('./routes/ShortenerRoute.js');
 const app = express();
-
 const PORT = process.env.PORT || 3000;
 require('dotenv').config();
+
+app.set('view engine', 'ejs');
+app.use(express.static('public'));
+
+
 
 app.use(express.json());
 app.use('', route);
