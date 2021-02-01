@@ -1,5 +1,5 @@
 const express = require('express');
-const { Redirect, AddUrl, DeleteUrl, WebInterface, GetUrlList } = require('../controller/ShortenerController');
+const { Redirect, AddUrl, DeleteUrl, WebInterface, GetUrlList } = require('../controllers/ShortenerController');
 const router = express.Router();
 
 // GET

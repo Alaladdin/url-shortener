@@ -31,7 +31,8 @@ const AddUrl = async (req, res) => {
       await newURL.save();
       return res.status(201).json({ shortId: newURL.shortId, url });
     }
-    return res.status(200).json({ shortId: URL.shortId, url });
+
+    return res.status(409).json({ msg: 'url already exists' });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ msg: 'some error occurred' });

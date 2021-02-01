@@ -1,26 +1,28 @@
-const createUrl = async (url) => {
-  const response = await fetch('http://localhost:3000', {
+const addUrl = async (url) => {
+  const response = await fetch('/', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ url }),
   });
 
-  return await response.json();
+  const data = await response.json();
+  if (response.status !== 201) {
+    throw new Error(data.msg);
+  }
+  return data;
 };
 
 const GetUrlList = async () => {
-  const response = await fetch('http://localhost:3000/list/');
+  const response = await fetch('/list/');
   return await response.json();
 };
 
 const deleteUrl = async (url) => {
-  console.log('trying...');
-  const response = await fetch(`http://localhost:3000/`, {
+  const response = await fetch(`/`, {
     method: 'DELETE',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ url }),
   });
-
   console.log(response);
 
   return await response.json();
@@ -42,10 +44,10 @@ const createUrlItem = (shortId, url, { onDelete }) => {
   deleteBtn.classList.add('btn', 'btn-danger');
 
   urlFull.href = url;
-  urlShort.href = `http://localhost:3000/${shortId}`;
+  urlShort.href = `/${shortId}`;
 
   urlFull.textContent = url;
-  urlShort.textContent = `http://localhost:3000/${shortId}`;
+  urlShort.textContent = `${window.location.origin}/${shortId}`;
   deleteBtn.textContent = 'Delete';
 
   urlFull.target = '_blank';
@@ -65,9 +67,12 @@ const createUrlItem = (shortId, url, { onDelete }) => {
 
 form.addEventListener('submit', async (e) => {
   e.preventDefault();
+
   const formInput = document.querySelector('.form-shorter__url');
   const urlListElement = document.querySelector('.url-list');
-  const res = await createUrl(formInput.value.trim());
+  const formValue = formInput.value.trim();
+
+  if (formValue.length <= 0) return;
 
   const handlers = {
     onDelete(item, url) {
@@ -75,13 +80,21 @@ form.addEventListener('submit', async (e) => {
       deleteUrl(url);
     },
   };
-  const urlItem = createUrlItem(res.shortId, res.url, handlers);
 
-  urlListElement.append(urlItem);
+  try {
+    const res = await addUrl(formValue);
+    const urlItem = createUrlItem(res.shortId, res.url, handlers);
+    urlListElement.append(urlItem);
+  } catch (err) {
+    console.error(err);
+  }
 });
 
 document.addEventListener('DOMContentLoaded', async () => {
   const urlListElement = document.querySelector('.url-list');
+  const formInput = document.querySelector('.form-shorter__url');
+
+  const shortBtn = document.querySelector('.form-shorter__submit');
   const { urlList } = await GetUrlList();
   const handlers = {
     onDelete(item, url) {
@@ -94,4 +107,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     const urlItemElement = createUrlItem(urlItem.shortId, urlItem.url, handlers);
     urlListElement.append(urlItemElement);
   });
+
+  shortBtn.disabled = formInput.value <= 0;
+  formInput.oninput = () => {
+    shortBtn.disabled = formInput.value <= 0;
+  };
 });
