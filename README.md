@@ -52,3 +52,5 @@ Open it in a browser
 - Web Interface
 - Authorization
 - Custom short url
+- Demo user with restrictions (5 links with auto delete after 5 min and whitelist)
+- Update url
