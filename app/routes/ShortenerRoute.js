@@ -1,8 +1,9 @@
 const express = require('express');
-const { Redirect, AddUrl, DeleteUrl, WebInterface, GetUrlList } = require('../controllers/ShortenerController');
-const router = express.Router();
+const {
+  Redirect, AddUrl, DeleteUrl, WebInterface, GetUrlList,
+} = require('../controllers/ShortenerController');
 
-// GET
+const router = express.Router();
 
 // Web Interface
 router.get('/', WebInterface);

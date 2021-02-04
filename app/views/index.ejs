@@ -1,39 +1,75 @@
 <!DOCTYPE html>
+<html lang='en'>
 <head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
     <title>URL shortener</title>
+
     <link rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css'>
+    <link rel="stylesheet" href="css/all.css">
 </head>
+
 <body>
+
+<header class='header'>
     <div class='container'>
-        <h1 class='page-title my-3 text-center'>URL shortener</h1>
-
-        <div class='card'>
-            <div class='card-header d-flex justify-content-between'>
-                <span>Links count: <%= urlList.count %></span>
-                <span class='event-message text-success'></span>
-            </div>
-
-            <div class='card-body'>
-                <form class='form-shorter input-group'>
-                    <input type='text' class='form-shorter__url form-control' placeholder='https://'
-                           value='https://google.com'>
-                    <div class='input-group-append'>
-                        <button class='form-shorter__submit btn btn-dark' id='usernameBtn' disabled>Short</button>
-                    </div>
-                </form>
-            </div>
-
-            <div class='message-box'>
-                <ul class='list-group list-group-flush' id='message-list'></ul>
-                <div class='info'></div>
-            </div>
-
-            <div class='url-list card-footer'>
-
+        <div class='row'>
+            <div class='col'>
+                <h1 class='header-title my-5 text-center'>URL shortener</h1>
             </div>
         </div>
     </div>
+</header>
 
-    <script src='/js/client.js'></script>
+<main class='main'>
+    <section class="url">
+        <div class='container'>
+            <div class='row'>
+                <div class='col'>
+                    <div class='card'>
+                        <!-- Card Header -->
+                        <div class='card-header'>
+                            <div class='row'>
+                                <span class='event-message col'></span>
+                                <span class='col-3 text-muted text-right'><%= version %></span>
+                            </div>
+                        </div>
+
+                        <!-- Card Body -->
+                        <div class='card-body'>
+                            <div class='row'>
+                                <div class='col'>
+                                    <form class='form-shorter input-group'>
+                                        <input type='url' class='form-shorter__url form-control' placeholder='https://' value='https://google.com'>
+                                        <div class='input-group-append'>
+                                            <button class='form-shorter__submit btn btn-dark' disabled>Short</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Card Footer -->
+                        <div class='url-list card-footer'></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer class='footer'>
+    <div class='container'>
+        <div class='row'>
+            <div class='col text-center'>
+                <a href='https://github.com/Alaladdin/url-shortener' class='footer__link text-dark' target='_blank' rel='noopener noreferrer nofollow'>
+                    Github
+                </a>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script src='/js/client.js'></script>
 </body>
 </html>
