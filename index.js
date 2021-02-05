@@ -3,14 +3,17 @@ const express = require('express');
 const rateLimit = require('express-rate-limit');
 const xss = require('xss-clean');
 const helmet = require('helmet');
+const session = require('express-session');
 const mongoSanitize = require('express-mongo-sanitize');
-// const cors = require('cors');
+const MongoStore = require('connect-mongo')(session);
 const mongoose = require('mongoose');
-const route = require('./app/routes/ShortenerRoute.js');
+const passport = require('./app/passport/setup');
+const ShortenerRoute = require('./app/routes/ShortenerRoute');
+const AuthRoute = require('./app/routes/AuthRoute');
+const WebRoute = require('./app/routes/WebRoute');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-
 const limit = rateLimit({
   max: 100,
   windowMs: 60 * 60 * 1000,
@@ -22,19 +25,30 @@ require('dotenv').config();
 app.set('views', path.join(__dirname, './app/views'));
 app.set('view engine', 'ejs');
 
-app.use(express.static('vendor'));
+app.use(express.static(path.join(__dirname, 'vendor')));
 app.use(express.json({ limit: '1kb' }));
+app.use(express.urlencoded({ extended: false }));
 app.use(limit);
 app.use(xss());
 app.use(helmet());
 app.use(mongoSanitize());
-// app.use(cors()); // if u want to enable CORS
-app.use('', route);
 
-mongoose.connect(process.env.MONGO_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
+app.use(session({
+  secret: process.env.SESSION_SECRET,
+  resave: false,
+  saveUninitialized: true,
+  store: new MongoStore({ mongooseConnection: mongoose.connection }),
+}));
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+app.use('', AuthRoute);
+app.use('', WebRoute);
+app.use('', ShortenerRoute);
+
+mongoose
+  .connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('connected to mongo database'))
   .catch((e) => console.error(e));
 
