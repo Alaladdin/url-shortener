@@ -1,0 +1,24 @@
+<% const registerDate = new Date(user.date).toLocaleDateString('ru-RU') %>
+
+<div class='profile profile-menu bg-dark text-light'>
+    <img class='profile__img' src='/photos/momo.jpg' alt='<%= user.username %>&apos;s profile photo'>
+    <div class='profile__name'><%= user.username %></div>
+
+    <ul class='profile__list list-reset'>
+        <li class='profile__item profile__url-limits' title='urls count limit'>
+            <span class='profile__item--badge'>limit</span>
+            <span class='profile__item--value'><%= user.maxUrls %></span>
+        </li>
+
+        <li class='profile__item profile__role'>
+            <span class='profile__item--badge'>role</span>
+            <span class='profile__item--value'><%= user.role %></span>
+        </li>
+
+        <li class='profile__item profile__date' title='register date'>
+            <span class='profile__item--badge'>date</span>
+            <span class='profile__item--value'><%= registerDate %></span>
+        </li>
+    </ul>
+</div>
+</div>

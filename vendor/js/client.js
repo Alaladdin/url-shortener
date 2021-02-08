@@ -60,8 +60,20 @@ document.addEventListener('DOMContentLoaded', async () => {
   };
 
   const GetUrlList = async () => {
-    const response = await fetch('/list/');
-    return response.json();
+    return fetch('/list/')
+      .then(async (res) => {
+        const json = await res.json();
+        if (!res.ok) throw Error(json.message);
+        return json;
+      })
+      .catch((err) => {
+        toggleForm(false);
+        createNotification(err, {
+          code: 'error',
+          freezeShow: true,
+        });
+        return { err };
+      });
   };
 
   const deleteUrl = async (url) => fetch('/', {
@@ -71,6 +83,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   })
     .then((res) => res.json())
     .then((res) => createNotification(res.message));
+
   const toggleForm = (active) => {
     const shortBtn = document.querySelector('.form-shorter__submit');
     shortBtn.disabled = !active;
@@ -166,43 +179,49 @@ document.addEventListener('DOMContentLoaded', async () => {
   };
 
   // Main side
+  const { urlList, err } = await GetUrlList();
   const form = document.querySelector('.form-shorter');
-  const urlListElement = document.querySelector('.url-list');
-  const formInput = document.querySelector('.form-shorter__url');
-  const { urlList } = await GetUrlList();
-  const getFormValue = () => formInput.value.trim();
-  const getFormValueLength = () => getFormValue().length;
-  const handlers = {
-    onDelete(item, url) {
-      item.remove();
-      deleteUrl(url);
-    },
-  };
+  const formInput = document.querySelector('.form-shorter__input');
 
-  toggleForm(getFormValueLength() > 0);
-  formInput.oninput = () => toggleForm(getFormValueLength() > 0);
-  window.ononline = updateOnlineStatus;
-  window.onoffline = updateOnlineStatus;
+  if (!err) {
+    const urlListElement = document.querySelector('.url-list');
+    const getFormValue = () => formInput.value.trim();
+    const getFormValueLength = () => getFormValue().length;
+    const handlers = {
+      onDelete(item, url) {
+        item.remove();
+        deleteUrl(url);
+      },
+    };
 
-  urlList.forEach((urlItem) => {
-    const urlItemElement = createUrlItem(urlItem.shortId, urlItem.url, handlers);
-    urlListElement.append(urlItemElement);
-  });
+    toggleForm(getFormValueLength() > 0);
+    formInput.oninput = () => toggleForm(getFormValueLength() > 0);
+    window.ononline = updateOnlineStatus;
+    window.onoffline = updateOnlineStatus;
 
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
+    urlList.forEach((urlItem) => {
+      const urlItemElement = createUrlItem(urlItem.shortId, urlItem.url, handlers);
+      urlListElement.append(urlItemElement);
+    });
 
-    if (getFormValueLength() <= 0) return;
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
 
-    try {
-      const res = await addUrl(getFormValue());
-      const urlItem = createUrlItem(res.shortId, res.url, handlers);
-      urlListElement.append(urlItem);
-      formInput.value = '';
-      toggleForm(getFormValueLength() > 0);
-      createNotification('url was created');
-    } catch (err) {
-      createNotification(err.message, { code: 'error' });
-    }
-  });
+      if (getFormValueLength() <= 0) return;
+
+      try {
+        const res = await addUrl(getFormValue());
+        const urlItem = createUrlItem(res.shortId, res.url, handlers);
+        urlListElement.append(urlItem);
+        formInput.value = '';
+        toggleForm(getFormValueLength() > 0);
+        createNotification('url was created');
+      } catch (error) {
+        createNotification(error.message, { code: 'error' });
+      }
+    });
+  } else {
+    formInput.disabled = true;
+    form.addEventListener('submit', (e) => e.preventDefault());
+  }
 });

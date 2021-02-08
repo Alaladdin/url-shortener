@@ -1,0 +1,153 @@
+.aside {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100%;
+  max-width: 300px;
+  height: 100%;
+}
+
+.navbar {
+  z-index: 10;
+
+  &-brand {
+    font-weight: 900;
+  }
+
+  &-brand {
+    color: var(--dark);
+    line-height: 50px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+  }
+
+  &-custom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 30px 50px;
+    font-size: 1.15rem;
+    text-transform: lowercase;
+
+    &__list {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-direction: row;
+    }
+
+    &__item {
+      &:not(:last-child) {
+        margin-right: 10px;
+      }
+    }
+  }
+
+  &__profile {
+    z-index: 1000;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: color 1s, transform .5s ease;
+    //&::after {
+    //  content: '';
+    //  position: absolute;
+    //  top: -20px;
+    //  right: -30px;
+    //  bottom: -20px;
+    //  left: -30px;
+    //  display: block;
+    //}
+
+    &:focus {
+      outline: none;
+    }
+
+    &--opened {
+      color: var(--light);
+      transform: translate3d(0, -13px, 0);
+
+      &::after {
+        content: '';
+        transform: rotate3d(0, 0, 0);
+        //top: -31px;
+        //right: -50px;
+        //bottom: -34px;
+        //left: -176px;
+      }
+    }
+  }
+}
+
+.profile {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+
+  &-menu {
+    position: fixed;
+    top: 0;
+    right: 0;
+    padding: 120px 20px 20px 20px;
+    width: 100%;
+    max-width: 300px;
+    height: 100%;
+    z-index: 3;
+    background: #363640;
+    transition: transform .5s ease;
+    transform: translateX(100%);
+
+    &--opened {
+      transform: translateX(0);
+    }
+  }
+
+  &__img {
+    object-fit: cover;
+    margin-bottom: 20px;
+    border: 5px solid #434f5b;
+    border-radius: 50%;
+    width: 120px;
+    height: 120px;
+    opacity: .8;
+    transition: opacity .3s;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+
+  &__name {
+    margin-bottom: 20px;
+    font-weight: bold;
+    font-size: 1.1rem;
+  }
+
+  &__list {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px 30px;
+    border-radius: 6px;
+    width: 100%;
+    background-color: #434f5b;
+  }
+
+  &__item {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+
+    &--badge {
+      margin-bottom: 5px;
+      color: #b6c0ca;
+      font-weight: 700;
+      font-size: .9rem;
+      text-transform: lowercase;
+    }
+
+    &--value {
+      //color: rgb(50, 51, 56);
+      font-weight: 700;
+      font-size: .9rem;
+    }
+  }
+}

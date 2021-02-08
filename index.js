@@ -1,3 +1,4 @@
+const fs = require('fs');
 const path = require('path');
 const express = require('express');
 const rateLimit = require('express-rate-limit');
@@ -32,8 +33,11 @@ app.use(limit);
 app.use(xss());
 app.use(helmet());
 app.use(mongoSanitize());
-
 app.use(session({
+  cookie: {
+    expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // + 30 days in milliseconds
+    secure: true,
+  },
   secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: true,
@@ -42,10 +46,10 @@ app.use(session({
 
 app.use(passport.initialize());
 app.use(passport.session());
-
 app.use('', AuthRoute);
 app.use('', WebRoute);
 app.use('', ShortenerRoute);
+app.disable('x-powered-by');
 
 mongoose
   .connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
