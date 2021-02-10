@@ -1,11 +1,6 @@
-html {
-  position: relative;
-  min-height: 100%;
-}
+@use 'sass:map';
 
-body {
-  margin-bottom: 60px;
-}
+@import 'breakpoints';
 
 .text-shorter {
   display: block;
@@ -23,31 +18,26 @@ body {
   }
 }
 
-.url {
-  &-list {
-    overflow-y: scroll;
-    max-height: 600px;
+// Tags
+.header {
+  margin-bottom: 100px;
+}
+
+.main {
+  transition: transform .5s ease;
+
+  &.menu-opened {
+    transform: translateX(-30px);
   }
+}
 
-  &__item {
-    &:not(:last-child) {
-      padding-bottom: 1rem;
-      border-bottom: 1px solid rgba(0, 0, 0, .1);
-    }
-
-    &:not(:first-child) {
-      padding-top: 1rem;
-    }
-
-    &:first-child {
-      padding-top: 0;
-    }
-  }
-
-  &__copy,
-  &__delete {
-    width: 100%;
-  }
+.aside {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100%;
+  max-width: 300px;
+  height: 100%;
 }
 
 .footer {
@@ -75,11 +65,8 @@ body {
   }
 }
 
-@media (min-width: 576px) {
-  .url {
-    &__copy,
-    &__delete {
-      width: auto;
-    }
+@media screen and (max-width: map-get($breakpoints, xs)) {
+  .header {
+    margin-bottom: 0;
   }
 }

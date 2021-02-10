@@ -21,6 +21,15 @@
     "ecmaVersion": 12
   },
   "rules": {
+    "no-console": [
+      "error",
+      {
+        "allow": [
+          "warn",
+          "error"
+        ]
+      }
+    ],
     "linebreak-style": [
       "error",
       "windows"

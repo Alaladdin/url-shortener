@@ -3,13 +3,10 @@ const { Redirect, AddUrl, DeleteUrl } = require('../controllers/ShortenerControl
 
 const router = express.Router();
 
-// Open shortId
 router.get('/:shortId', Redirect);
 
-// Delete shortId
 router.delete('/', DeleteUrl);
 
-// POST
 router.post('/', AddUrl);
 
 module.exports = router;
