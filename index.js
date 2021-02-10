@@ -25,6 +25,7 @@ mongoose.set('useCreateIndex', true);
 
 app.set('views', path.join(__dirname, './app/views'));
 app.set('view engine', 'ejs');
+
 app.use(express.static(path.join(__dirname, 'vendor')));
 app.use(express.json({ limit: '1kb' }));
 app.use(express.urlencoded({ extended: false }));
@@ -48,16 +49,11 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use('', Routes);
 app.disable('x-powered-by');
+app.enable('trust proxy');
 
 mongoose
   .connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('connected to mongo database'))
   .catch((e) => console.error(e));
 
-const https = require('https');
-const fs = require('fs');
-https.createServer({
-  key: fs.readFileSync(path.join(__dirname, './ssl/localhost__key.pem')),
-  cert: fs.readFileSync('./ssl/localhost.pem'),
-}, app)
-  .listen(PORT, () => console.log(`listening on port ${PORT}`));
+app.listen(PORT, () => console.log(`listening on port ${PORT}`));
