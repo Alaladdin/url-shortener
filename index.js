@@ -37,6 +37,7 @@ app.use(session({
     expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 days in milliseconds
     secure: true,
   },
+  proxy: true,
   secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: true,
@@ -53,4 +54,10 @@ mongoose
   .then(() => console.log('connected to mongo database'))
   .catch((e) => console.error(e));
 
-app.listen(PORT, () => console.log(`listening on port ${PORT}`));
+const https = require('https');
+const fs = require('fs');
+https.createServer({
+  key: fs.readFileSync(path.join(__dirname, './ssl/localhost__key.pem')),
+  cert: fs.readFileSync('./ssl/localhost.pem'),
+}, app)
+  .listen(PORT, () => console.log(`listening on port ${PORT}`));
