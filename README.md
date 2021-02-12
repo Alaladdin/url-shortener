@@ -9,7 +9,12 @@ Tested via [Postman](https://postman.com)
 Create `.env` file on the folder root and write the following
 
 ```dotenv
-MONGO_URI=   // Enter mongo URI here
+MONGO_URI=EXAMPLE:STRING
+SESSION_SECRET=EXAMPLE:STRING
+REDIS_URI=EXAMPLE:STRING
+REDIS_HOST=EXAMPLE:STRING
+REDIS_PORT=EXAMPLE:STRING
+REDIS_PASS=EXAMPLE:STRING
 ```
 
 ### Add url
@@ -17,11 +22,13 @@ MONGO_URI=   // Enter mongo URI here
 Make `post` request to host to add new url
 
 > Warning! Protocol is required!
+>
+> Need to be logged!
 
 #### Request example
 
 ```javascript
-fetch('http://127.0.0.1:3000', {
+fetch('/', {
   method: 'POST',
   headers: { 'Content-Type': 'application/json' },
   body: JSON.stringify({
@@ -49,8 +56,12 @@ Open it in a browser
 
 ## TODO
 
-- Web Interface
-- Authorization
++ ~~Web Interface~~
++ ~~Authorization~~
+
 - Custom short url
-- Demo user with restrictions (5 links with auto delete after 5 min and whitelist)
 - Update url
+
+## Known Bugs
+
+- User could create urls over count limit (just need use 2 tabs and add urls fast)

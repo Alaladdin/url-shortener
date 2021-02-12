@@ -1,11 +1,32 @@
 const mongoose = require('mongoose');
 const shortid = require('shortid');
 
-// owner - generate hash and save it in localStorage
 const UrlSchema = new mongoose.Schema({
-  url: { type: String, required: true },
-  shortId: { type: String, required: true, default: shortid.generate },
-  owner: { type: String, required: true, default: 'anonymous' },
+  url: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  shortId: {
+    type: String,
+    required: true,
+    default: shortid.generate,
+  },
+  owner: {
+    type: String,
+    required: true,
+    default: 'anonymous',
+  },
+}, {
+  toObject: {
+    versionKey: false,
+  },
+});
+
+UrlSchema.index({
+  url: 1,
+  shortId: 1,
+  owner: 1,
 });
 
 module.exports = mongoose.model('url', UrlSchema);
