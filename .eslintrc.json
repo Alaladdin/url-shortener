@@ -2,20 +2,11 @@
   "env": {
     "browser": true,
     "commonjs": true,
-    "es2021": true
+    "es2021": true,
+    "node": true
   },
   "extends": [
-    "airbnb-base",
-    "plugin:import/errors",
-    "plugin:import/warnings",
-    "plugin:sonarjs/recommended",
-    "plugin:promise/recommended"
-  ],
-  "plugins": [
-    "import",
-    "sonarjs",
-    "no-loops",
-    "promise"
+    "airbnb-base"
   ],
   "parserOptions": {
     "ecmaVersion": 12
@@ -33,12 +24,6 @@
     "linebreak-style": [
       "error",
       "windows"
-    ],
-    "import/no-extraneous-dependencies": [
-      "error",
-      {
-        "packageDir": "./"
-      }
     ]
   }
 }
