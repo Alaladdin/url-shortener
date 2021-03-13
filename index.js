@@ -8,7 +8,7 @@ const xss = require('xss-clean');
 const helmet = require('helmet');
 const session = require('express-session');
 const mongoSanitize = require('express-mongo-sanitize');
-const MongoStore = require('connect-mongo')(session);
+const MongoStore = require('connect-mongo');
 const mongoose = require('mongoose');
 const passport = require('./app/passport/setup');
 const Routes = require('./app/routes/SetupRoutes');
@@ -18,7 +18,7 @@ const app = express();
 const limit = rateLimit({
   max: 100,
   windowMs: 60 * 60 * 1000,
-  message: 'Too many requests',
+  message: 'too many requests',
 });
 
 mongoose.set('useCreateIndex', true);
@@ -38,11 +38,10 @@ app.use(session({
     expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 days in milliseconds
     secure: true,
   },
-  proxy: true,
   secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: true,
-  store: new MongoStore({ mongooseConnection: mongoose.connection }),
+  store: MongoStore.create({ mongoUrl: process.env.MONGO_URI }),
 }));
 
 app.use(passport.initialize());
