@@ -1,6 +1,6 @@
 {
   "name": "url-shortener",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "Node JS app to shorten your URLs",
   "keywords": [
     "nodejs",
@@ -11,7 +11,9 @@
   "main": "index.js",
   "scripts": {
     "start": "node ./index.js",
-    "dev": "nodemon ./index.js"
+    "dev": "nodemon ./index.js",
+    "deploy:setup": "pm2 deploy production setup",
+    "deploy:prod": "pm2 deploy ecosystem.config.js production --force"
   },
   "author": "Alaladdin",
   "license": "ISC",
