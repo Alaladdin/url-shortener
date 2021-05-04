@@ -1,11 +1,12 @@
 const mongoose = require('mongoose');
 const cachegoose = require('cachegoose');
+const { redisHost, redisPort, redisPass } = require('../../config');
 
 cachegoose(mongoose, {
   engine: 'redis',
-  host: process.env.REDIS_HOST,
-  port: process.env.REDIS_PORT,
-  password: process.env.REDIS_PASS,
+  host: redisHost,
+  port: redisPort,
+  password: redisPass,
 });
 
 const clearCache = (key, cb) => {

@@ -8,7 +8,7 @@ const GetUrlList = async (req, res) => {
   const urlList = await Url.find({ owner: user.username }, (err) => {
     if (err) return res.status(500).json({ message: 'some error was occurred', error: err });
   })
-    .select({ url: 1, shortId: 1 })
+    .select({ url: 1, shortId: 1, visitsCount: 1 })
     .lean()
     .cache(600, cacheKey)
     .catch((err) => console.error(err));

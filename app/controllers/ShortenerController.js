@@ -8,15 +8,14 @@ const Redirect = async (req, res) => {
   if (!shortId) return res.status(400).json({ message: 'id not provided' });
 
   try {
-    const urlCacheKey = `${shortId}__url`;
     const URL = await Url.findOne({ shortId })
-      .select({ url: 1 })
-      .lean()
-      .cache(3600, urlCacheKey);
+      .select({ url: 1, visitsCount: 1 });
     if (!URL) return res.status(404).json({ message: 'invalid url' });
 
+    await URL.updateOne({ visitsCount: URL.visitsCount + 1 });
     return res.redirect(URL.url);
   } catch (err) {
+    console.error(err);
     return res.status(500).json({ message: 'some error has occurred' });
   }
 };
@@ -27,14 +26,10 @@ const AddUrl = async (req, res) => {
   const userUrlsCount = await Url.countDocuments({ owner: username });
 
   if (!username) return res.status(403).json({ message: 'need to be logged' });
-  if (userUrlsCount >= maxUrls) {
-    return res.status(400).json({ message: `you have reached the urls limit: ${maxUrls}` });
-  }
+  if (userUrlsCount >= maxUrls) return res.status(400).json({ message: `you have reached the urls limit: ${maxUrls}` });
 
   if (!url) return res.status(400).json({ message: 'url not provided' });
-  if (!validator.isURL(url, { require_protocol: true })) {
-    return res.status(400).json({ message: 'invalid url' });
-  }
+  if (!validator.isURL(url, { require_protocol: true })) return res.status(400).json({ message: 'invalid url' });
 
   try {
     const userCacheList = `${username}__url-list`;
@@ -44,11 +39,12 @@ const AddUrl = async (req, res) => {
       const newURL = new Url({ owner: username, url });
       await newURL.save();
       clearCache(userCacheList);
-      return res.status(201).json({ shortId: newURL.shortId, url });
+      return res.status(201).json({ shortId: newURL.shortId, url, visitsCount: 0 });
     }
 
     return res.status(409).json({ message: 'url already exists' });
   } catch (err) {
+    console.error(err);
     return res.status(500).json({ message: 'some error occurred' });
   }
 };
@@ -67,6 +63,7 @@ const DeleteUrl = async (req, res) => {
     clearCache(userCacheList);
     return res.status(200).json({ message: 'url was deleted' });
   } catch (err) {
+    console.error(err);
     return res.status(500).json({ message: 'some error occurred' });
   }
 };

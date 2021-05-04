@@ -17,6 +17,10 @@ const UrlSchema = new mongoose.Schema({
     required: true,
     default: 'anonymous',
   },
+  visitsCount: {
+    type: Number,
+    default: 0,
+  },
 }, {
   toObject: {
     versionKey: false,
@@ -27,6 +31,7 @@ UrlSchema.index({
   url: 1,
   shortId: 1,
   owner: 1,
+  visits: 1,
 });
 
 module.exports = mongoose.model('url', UrlSchema);

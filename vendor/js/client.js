@@ -121,7 +121,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     toggleForm(navigatorOnline);
   };
 
-  const createUrlItem = (shortId, url, { onDelete }) => {
+  const createUrlItem = (shortId, url, visitsCount, { onDelete }) => {
     const urlItem = document.createElement('div');
     const urlGroup = document.createElement('div');
     const urlFullCol = document.createElement('div');
@@ -129,6 +129,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const urlFull = document.createElement('a');
     const urlShort = document.createElement('a');
     const btnsCol = document.createElement('div');
+    const visits = document.createElement('small');
     const copyBtn = document.createElement('button');
     const deleteBtn = document.createElement('button');
 
@@ -138,20 +139,25 @@ document.addEventListener('DOMContentLoaded', async () => {
     urlShortCol.classList.add('col');
     urlFull.classList.add('url__full', 'text-shorter', 'text-secondary');
     urlShort.classList.add('url__sort', 'text-shorter');
+    visits.classList.add('text-muted', 'text-small', 'mr-3');
     copyBtn.classList.add('url__copy', 'btn', 'btn-sm', 'btn-secondary', 'mr-2');
     deleteBtn.classList.add('url__delete', 'btn', 'btn-sm', 'btn-danger');
-    btnsCol.classList.add('col',
-      'col-sm-4',
-      'col-md-3',
-      'col-lg-2',
+    btnsCol.classList.add(
+      'col',
+      'col-sm-6',
+      'col-md-5',
+      'col-lg-3',
       'text-sm-right',
       'd-flex',
-      'justify-content-end');
+      'justify-content-end',
+      'align-items-center',
+    );
 
     urlFull.href = url;
     urlShort.href = `/${shortId}`;
     urlFull.textContent = url;
     urlShort.textContent = `${window.location.origin}/${shortId}`;
+    visits.textContent = `visited: ${visitsCount}`;
     copyBtn.textContent = 'Copy';
     deleteBtn.textContent = 'Delete';
 
@@ -162,6 +168,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     urlShortCol.append(urlShort);
     urlGroup.append(urlFullCol);
     urlGroup.append(urlShortCol);
+    btnsCol.append(visits);
     btnsCol.append(copyBtn);
     btnsCol.append(deleteBtn);
     urlItem.append(urlGroup);
@@ -200,7 +207,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     window.onoffline = updateOnlineStatus;
 
     urlList.forEach((urlItem) => {
-      const urlItemElement = createUrlItem(urlItem.shortId, urlItem.url, handlers);
+      const urlItemElement = createUrlItem(
+        urlItem.shortId,
+        urlItem.url,
+        urlItem.visitsCount,
+        handlers,
+      );
       urlListElement.append(urlItemElement);
     });
 
@@ -211,13 +223,13 @@ document.addEventListener('DOMContentLoaded', async () => {
 
       try {
         const res = await addUrl(getFormValue());
-        const urlItem = createUrlItem(res.shortId, res.url, handlers);
+        const urlItem = createUrlItem(res.shortId, res.url, res.visitsCount, handlers);
         urlListElement.append(urlItem);
         formInput.value = '';
         toggleForm(getFormValueLength() > 0);
         createNotification('url was created');
-      } catch (err) {
-        createNotification(err.message, { code: 'error' });
+      } catch (error) {
+        createNotification(error.message, { code: 'error' });
       }
     });
   } else {
