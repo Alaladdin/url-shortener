@@ -3,7 +3,7 @@ const express = require('express');
 const helmet = require('helmet');
 const compression = require('compression');
 const mongoose = require('mongoose');
-const { port, mongoUri } = require('./config');
+const { host, port, mongoUri } = require('./config');
 const route = require('./app/routes');
 
 const app = express();
@@ -17,8 +17,8 @@ app.use('', route);
 mongoose.connect(mongoUri, { useNewUrlParser: true, useUnifiedTopology: true }, () => {
   console.info('[MONGO] connected');
 
-  app.listen(port);
+  app.listen(port, host);
 
-  console.info(`[APP] listening :${port}`);
+  console.info(`[APP] listening ${host}:${port}`);
   process.send('ready');
 });
