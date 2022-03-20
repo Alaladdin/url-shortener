@@ -8,8 +8,8 @@ const route = require('./app/routes');
 
 const app = express();
 
-app.use(compression());
 app.use(helmet());
+app.use(compression({ level: 9 }));
 app.disable('x-powered-by');
 app.enable('trust proxy');
 app.use('', route);
@@ -17,8 +17,8 @@ app.use('', route);
 mongoose.connect(mongoUri, { useNewUrlParser: true, useUnifiedTopology: true }, () => {
   console.info('[MONGO] connected');
 
-  app.listen(port, () => {
-    console.info(`[APP] listening :${port}`);
-    process.send('ready');
-  });
+  app.listen(port);
+
+  console.info(`[APP] listening :${port}`);
+  process.send('ready');
 });

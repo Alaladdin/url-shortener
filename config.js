@@ -7,7 +7,7 @@ const isDBProd = isProd || !cliParams.includes('--db-dev');
 console.info(`[DATABASE] ${isDBProd ? 'PROD' : 'DEV'}`);
 
 module.exports = {
-  port     : process.env.PORT || 3005,
+  port     : process.env.PORT || 3010,
   mongoUri : isDBProd ? process.env.MONGO_URI : process.env.MONGO_URI_DEV,
   redisHost: isProd ? process.env.REDIS_HOST : 'localhost',
   redisPort: isProd ? process.env.REDIS_PORT : 6379,

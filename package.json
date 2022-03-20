@@ -1,6 +1,6 @@
 {
   "name": "url-shortener",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Node JS app to shorten your URLs",
   "keywords": ["nodejs", "redis", "mongoose", "mongodb"],
   "main": "index.js",
