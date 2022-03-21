@@ -1,8 +1,13 @@
 {
   "name": "url-shortener",
-  "version": "2.0.4",
+  "version": "2.1.0",
   "description": "Node JS app to shorten your URLs",
-  "keywords": ["nodejs", "redis", "mongoose", "mongodb"],
+  "keywords": [
+    "nodejs",
+    "redis",
+    "mongoose",
+    "mongodb"
+  ],
   "main": "index.js",
   "scripts": {
     "start": "node ./index.js",
@@ -25,6 +30,7 @@
     "express": "^4.17.3",
     "helmet": "^5.0.2",
     "mongoose": "^6.2.7",
+    "redis": "^4.0.4",
     "shortid": "^2.2.16"
   },
   "devDependencies": {

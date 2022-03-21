@@ -5,6 +5,7 @@ const compression = require('compression');
 const mongoose = require('mongoose');
 const { host, port, mongoUri } = require('./config');
 const route = require('./app/routes');
+const { client } = require('./app/setup/cache');
 
 const app = express();
 
@@ -14,11 +15,13 @@ app.disable('x-powered-by');
 app.enable('trust proxy');
 app.use('', route);
 
-mongoose.connect(mongoUri, { useNewUrlParser: true, useUnifiedTopology: true }, () => {
-  console.info('[MONGO] connected');
-
-  app.listen(port, host);
-
-  console.info(`[APP] listening ${host}:${port}`);
-  process.send('ready');
-});
+client.connect()
+  .then(() => console.info('connected to REDIS'))
+  .then(() => mongoose.connect(mongoUri, { useNewUrlParser: true, useUnifiedTopology: true }))
+  .then(() => console.info('connected to MONGO'))
+  .then(() => app.listen(port, host))
+  .then(() => {
+    console.info(`listening ${host}:${port}`);
+    process.send('ready');
+  })
+  .catch(console.error);

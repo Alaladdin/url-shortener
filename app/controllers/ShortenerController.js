@@ -7,16 +7,21 @@ const redirect = async (req, res) => {
     return res.status(400).json({ message: '"shortId" was not provided' });
 
   try {
-    const urlData = await Url.findOne({ shortId }).lean();
-
-    console.log({ urlData });
+    const urlData = await Url.findOne({ shortId })
+      .select({ url: 1, visitedTimes: 1 })
+      .lean()
+      .cache({ update: true });
 
     if (!urlData)
       return res.status(404).json({ message: 'invalid url' });
 
-    await Url.updateOne({ shortId }, { visitedTimes: urlData.visitedTimes + 1 });
+    await Url.updateOne(
+      { shortId },
+      { visitedTimes: urlData.visitedTimes + 1 },
+      { clearCache: false }
+    );
 
-    return res.redirect(urlData.url);
+    return res.redirect(301, urlData.url);
   } catch (err) {
     console.error(err);
 
