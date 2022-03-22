@@ -21,7 +21,7 @@ const redirect = async (req, res) => {
       { clearCache: false }
     );
 
-    return res.redirect(301, urlData.url);
+    return res.redirect(307, urlData.url);
   } catch (err) {
     console.error(err);
 
