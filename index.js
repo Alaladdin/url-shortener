@@ -9,7 +9,7 @@ const { client } = require('./app/setup/cache');
 
 const app = express();
 
-app.use(helmet());
+app.use(helmet({ frameguard: { action: 'deny' } }));
 app.use(compression({ level: 9 }));
 app.disable('x-powered-by');
 app.enable('trust proxy');
