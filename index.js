@@ -22,6 +22,5 @@ client.connect()
   .then(() => app.listen(port, host))
   .then(() => {
     console.info(`listening ${host}:${port}`);
-    process.send('ready');
   })
   .catch(console.error);
