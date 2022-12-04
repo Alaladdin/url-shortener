@@ -4,7 +4,7 @@ const isProd = process.env.NODE_ENV === 'production';
 
 module.exports = {
   port            : process.env.PORT || 3010,
-  host            : process.env.HOST || '127.0.0.1',
+  host            : process.env.HOST || '0.0.0.0',
   mongoUri        : isProd ? process.env.MONGO_URI : process.env.MONGO_URI_DEV,
   redisHost       : isProd ? process.env.REDIS_HOST : 'localhost',
   redisPort       : isProd ? process.env.REDIS_PORT : 6379,
