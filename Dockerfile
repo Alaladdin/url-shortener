@@ -1,10 +1,10 @@
 FROM node:16-alpine
 
 WORKDIR /usr/src/app
-COPY package*.json ./
+COPY package*.json .
 RUN npm ci --omit=dev
 
 COPY . .
-EXPOSE 3010
+EXPOSE ${PORT}
 
 CMD [ "npm", "start" ]
